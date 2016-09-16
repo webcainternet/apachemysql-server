@@ -20,10 +20,10 @@ RUN apt-get update;
 # Install Apache + PHP
 RUN apt-get install -y php5-cli php5 php5-mcrypt php5-curl php5-mysql php-pear php-net-smtp php-net-socket php-mdb2-driver-mysql php-mdb2 php-mail-mimedecode php-mail-mime
 
-# Install Postfix.
-RUN echo "postfix postfix/main_mailer_type string Internet site" > preseed.txt
-RUN echo "postfix postfix/mailname string mail.webca.com.br" >> preseed.txt
-# RUN apt-get install -y postfix
+# Install SSL
+RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
+RUN apt-get update;
+RUN apt-get install -y libapache2-mod-gnutls
 
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php5/apache2/php.ini
@@ -33,7 +33,9 @@ RUN a2enmod rewrite
 
 #ADD ./000-default.conf /etc/apache2/sites-available/
 ADD ./001-web.conf /etc/apache2/sites-available/
+ADD ./002-ssl.conf /etc/apache2/sites-available/
 RUN ln -s /etc/apache2/sites-available/001-web.conf /etc/apache2/sites-enabled/
+RUN ln -s /etc/apache2/sites-available/002-ssl.conf /etc/apache2/sites-enabled/
 #RUN unlink /etc/apache2/sites-enabled/000-default.conf
 #RUN ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/
 RUN rm /etc/apache2/sites-enabled/000-default.conf
@@ -51,7 +53,15 @@ ENV APACHE_SERVERNAME localhost
 ENV APACHE_SERVERALIAS docker.localhost
 ENV APACHE_DOCUMENTROOT /var/www/html
 
+
+# Install Postfix.
+# RUN echo "postfix postfix/main_mailer_type string Internet site" > preseed.txt
+# RUN echo "postfix postfix/mailname string mail.webca.com.br" >> preseed.txt
+# RUN apt-get install -y postfix
+
+
 EXPOSE 80
+EXPOSE 443
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
 CMD ["bash", "start.sh"]
