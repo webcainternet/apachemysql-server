@@ -28,6 +28,10 @@ RUN echo "postfix postfix/mailname string mail.webca.com.br" >> preseed.txt
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php5/cli/php.ini
 RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php5/apache2/php.ini
 
+RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ America\/Sao_Paulo/g' /etc/php5/apache2/php.ini
+
+RUN sed -i 's/\;error_log\ \=\ php_errors\.log/error_log\ \=\ \/var\/www\/html\/logs\/php_errors\.log/g' /etc/php5/apache2/php.ini
+
 # Activate a2enmod
 RUN a2enmod rewrite
 
@@ -50,6 +54,8 @@ ENV APACHE_SERVERADMIN fernando.mendes@webca.com.br
 ENV APACHE_SERVERNAME localhost
 ENV APACHE_SERVERALIAS docker.localhost
 ENV APACHE_DOCUMENTROOT /var/www/html
+
+RUN export TERM=xterm
 
 EXPOSE 80
 ADD start.sh /start.sh
