@@ -18,7 +18,7 @@ RUN export LANGUAGE=en_US.UTF-8 && \
 RUN apt-get update;
 
 # Install Apache + PHP
-RUN apt-get install -y php5-cli php5 php5-mcrypt php5-curl php5-mysql php-pear php-net-smtp php-net-socket php-mdb2-driver-mysql php-mdb2 php-mail-mimedecode php-mail-mime
+RUN apt-get install -y php5-cli php5 php5-mcrypt php5-curl php5-mysql php5-gd php-pear php-net-smtp php-net-socket php-mdb2-driver-mysql php-mdb2 php-mail-mimedecode php-mail-mime
 
 # Install SSL
 RUN echo "deb http://ftp.debian.org/debian jessie-backports main" >> /etc/apt/sources.list
