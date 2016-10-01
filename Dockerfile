@@ -57,6 +57,8 @@ ENV APACHE_DOCUMENTROOT /var/www/html
 
 RUN export TERM=xterm
 
+RUN echo "Teste Fernando" >> /tmp/fernando.txt
+
 EXPOSE 80
 ADD start.sh /start.sh
 RUN chmod 0755 /start.sh
